@@ -1,11 +1,12 @@
 # Refusal-direction steering on Tiny Aya (EN / HI / GU)
 
-Lexsi AI Safety Hackathon, Track 2b. SafeTune steers, AuditKIT scores. Write-up: [ARTICLE.md](ARTICLE.md). Lab notes: [FINDINGS.md](FINDINGS.md).
+Lexsi AI Safety Hackathon, Track 2b. SafeTune steers, AuditKIT scores. Write-up: [ARTICLE.md](ARTICLE.md). Numbers: [METRICS.md](METRICS.md). Submission summary: [SUBMISSION.md](SUBMISSION.md). Lab notes: [FINDINGS.md](FINDINGS.md).
 
 | Path | What |
 |---|---|
 | `src/run_final.py` | **the submitted run**: preflight → baseline grid → calibration → alpha mini-sweep → steered grid, checkpointed to `results/final/` |
 | `src/report_final.py` | scores baseline vs steered through AuditKIT (`compare` + `significance` per language) → `metrics.md` |
+| `src/bench_throughput.py` | paired baseline-vs-steered timing on identical batches |
 | `src/push_hub.py` | publishes prompts + metrics (public) and raw generations (private) to the HF Hub |
 | `src/eval_steering.py` | calibrate the refusal direction, generate baseline + one pass per alpha |
 | `src/score.py` | EN/HI/GU refusal classifier → `metrics.json`, `metrics.md`, AuditKIT runs and comparisons |
@@ -30,6 +31,7 @@ Submitted run (one 8 GB GPU, CUDA build of torch, access to the gated `CohereLab
 
 ```bash
 python src/run_final.py                          # ~1 h on an RTX 5050; resumes if interrupted
+python src/bench_throughput.py --run-dir results/final
 python src/report_final.py --run-dir results/final
 python src/push_hub.py --run-dir results/final   # needs a write token
 ```

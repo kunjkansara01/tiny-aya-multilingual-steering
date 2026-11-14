@@ -103,7 +103,8 @@ def stage(run: Path, tmp: Path) -> dict[str, Path]:
     # 2 results (public): nothing with model answers
     results.mkdir()
     metrics = json.loads((run / "metrics.json").read_text(encoding="utf-8"))
-    for name in ("metrics.md", "metrics.json", "calibration.json", "sweep.json", "state.json"):
+    for name in ("metrics.md", "metrics.json", "calibration.json", "sweep.json", "state.json",
+                 "throughput_bench.json", "throughput_bench_run1_raw.txt"):
         if (run / name).exists():
             shutil.copy(run / name, results / name)
     pre = run / "preflight.json"
@@ -116,6 +117,7 @@ def stage(run: Path, tmp: Path) -> dict[str, Path]:
     (results / "auditkit").mkdir()
     for f in (run / "auditkit").glob("compare_*.txt"):
         shutil.copy(f, results / "auditkit" / f.name)
+    shutil.copy(run / "metrics.md", results / "METRICS.md")  # the name ARTICLE.md links to
     for name in ("ARTICLE.md", "FINDINGS.md"):
         if (ROOT / name).exists():
             shutil.copy(ROOT / name, results / name)

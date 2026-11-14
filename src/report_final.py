@@ -198,16 +198,34 @@ def render(out: dict) -> str:
                          f"{cell(m[c][sl]['degenerate_rate'])} | {cell(m[c][sl]['capability_accuracy'])} |")
 
     bench = out.get("throughput_bench")
-    if bench:
-        a = bench["all"]
+    if bench and "trials" in bench.get("all", {}):
+        def brow(label, d):
+            def ratio(key):
+                iqr = d.get(key + "_iqr")
+                return f"{d[key + '_median']:.2f}×" + (f" ({iqr[0]:.2f}–{iqr[1]:.2f})" if iqr else "")
+            return (f"| {label} | {d['trials']} | {d['baseline_tok_s_median']} | {d['steered_tok_s_median']} | "
+                    f"{d['steered_gpu_tok_s_median']} | {ratio('steered_over_baseline_time')} | "
+                    f"{ratio('steered_gpu_over_baseline_time')} |")
+
         L += ["", "## Throughput: controlled benchmark", "",
-              f"`src/bench_throughput.py`: the same {len(bench['by_lang'])} batches of {bench['batch']} prompts, exactly "
-              f"{bench['steps']} decode steps each, baseline and steered back to back, {bench['rounds']} rounds "
-              f"({a['n_timings_per_condition']} timings per condition). This isolates the cost of the steering hooks.", "",
-              "| Language | Baseline tok/s (sd) | Steered tok/s (sd) | Steering overhead |", "|---|---|---|---|"]
-        for sl, d in list(bench["by_lang"].items()) + [("all", a)]:
-            L.append(f"| {LANG_NAMES.get(sl, sl)} | {d['baseline_tok_s']} ({d['baseline_sd']}) | {d['steered_tok_s']} "
-                     f"({d['steered_sd']}) | {100 * (d['baseline_tok_s'] / d['steered_tok_s'] - 1):+.1f}% time per token |")
+              f"`src/bench_throughput.py`: batches of {bench['batch']} prompts, exactly {bench['steps']} decode steps, the three "
+              "conditions back to back inside each trial with the order rotated. Medians, because the GPU flips between a "
+              "fast and a slow state during any run (see the grid logs below); the time ratio is computed inside each "
+              "trial, so a flip between trials does not move it. *Steered* = SafeTune's hooks exactly as in the grids "
+              "(direction kept on the CPU, moved to the GPU on every call). *Steered, vector on GPU* = same hooks and "
+              "same numbers, direction placed on the GPU once. *Fast state* = trials whose baseline ran within 1.5× of "
+              "the fastest baseline.", "",
+              "| Slice | Trials | Baseline tok/s | Steered tok/s | Steered tok/s, vector on GPU | Time vs baseline: steered (IQR) | Time vs baseline: vector on GPU (IQR) |",
+              "|---|---|---|---|---|---|---|",
+              brow("All trials", bench["all"])]
+        if bench["fast_state"]["trials"] != bench["all"]["trials"]:
+            L.append(brow("Fast state only", bench["fast_state"]))
+        else:
+            L[-5] += (f" In this run every trial fell in one state (median {bench['all']['baseline_ms_per_step_median']} "
+                      "ms per decode step for the baseline); an earlier, unpaired run of the same benchmark caught the "
+                      "fast state for some batches (baseline 104–152 tok/s, steered 81–84 tok/s, i.e. about 1.3× the "
+                      "time; raw timings in `throughput_bench_run1_raw.txt`).")
+        L += [brow(LANG_NAMES.get(lg, lg), d) for lg, d in bench["by_lang"].items()]
 
     tp = out.get("throughput") or {}
     if tp.get("baseline") and tp.get("steered"):
