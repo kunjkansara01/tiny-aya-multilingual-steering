@@ -1,0 +1,7 @@
+# Python >= 3.12 (SafeTune requirement). Colab: also run `pip uninstall -y torchao`.
+safetune>=0.1.12
+auditkit>=1.1.11
+transformers
+datasets
+torch
+peft
