@@ -162,6 +162,14 @@ pushing along a "refusal" direction is not guaranteed to move every reply toward
 - **Single model, single run, greedy decoding**, alpha chosen on a 60-prompt subset that overlaps the evaluation
   set (English and Hindi only). No adaptive attacker: steering raises the default refusal rate, it is not a defence
   against jailbreak prompts or against someone who can edit activations.
+- **The direction is dual-use, and we disclose it instead of gating it.** The vector that adds refusal also removes
+  it: projecting it out of the residual stream (`mode="ablate"`) took refusal on the held-out harmful prompts from
+  3/8 to 0/8 during calibration. Publishing the vector therefore publishes a way to weaken this model's refusals.
+  We release it anyway, with that stated on the model card, because gating would protect little: anyone can
+  recompute the direction in minutes from the public calibration prompts with SafeTune, the method is published,
+  and the base model is small and downloadable. The same holds for the raw generations, which include the
+  unsteered model's compliant replies to harmful prompts; they are public with a content warning so that every
+  label in this article can be audited.
 
 ## Discussion
 
@@ -186,10 +194,14 @@ python src/report_final.py --run-dir results/final
 One 8 GB GPU (RTX 5050 Laptop, bf16: weights 6.24 GiB, peak 6.32 GiB), Python 3.12, SafeTune 0.1.18, AuditKIT
 1.1.12. Every fallback taken during the run is listed at the top of `METRICS.md`; lab notes are in `FINDINGS.md`.
 
-**Artifacts.** Code: https://github.com/kunjkansara01/tiny-aya-multilingual-steering · Prompts (public): https://huggingface.co/datasets/kpk11/safety-prompts-en-hi-gu · Metrics and this article (public):
-https://huggingface.co/datasets/kpk11/tiny-aya-refusal-steering-results · Raw generations, scored rows, AuditKIT run files and the direction vector are in a private Hub
-repository because they contain model replies to harmful prompts and a vector whose ablation removes refusals;
-**available to the judges on request**.
+**Artifacts (all public and un-gated).**
+
+- Code: https://github.com/kunjkansara01/tiny-aya-multilingual-steering
+- Track 2b model artifact, the direction vector and steering config: https://huggingface.co/kpk11/tiny-aya-refusal-direction
+- Prompts: https://huggingface.co/datasets/kpk11/safety-prompts-en-hi-gu
+- Raw baseline and steered generations, scored rows, AuditKIT run files (content warning: model replies to harmful
+  prompts): https://huggingface.co/datasets/kpk11/tiny-aya-refusal-steering-generations
+- Metrics and this article: https://huggingface.co/datasets/kpk11/tiny-aya-refusal-steering-results
 
 ## References
 

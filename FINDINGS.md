@@ -157,3 +157,8 @@ Everything below is a Tiny Aya result from the local run (not Colab).
   total VRAM use at 7.3-7.6 of 8 GiB with a browser also on the GPU; cause not proven.
 - **R15. Process notes.** A batch size of 4 did not help (per-step time unchanged, throughput halved). One runner
   bug of mine (`del g` before the log line) cost one failed attempt; caught before the int8 fallback fired.
+- **R16. Everything published, public and un-gated (submission rule).** The generations dataset was flipped from
+  private to public with a content warning at the top of its card; the direction vector is its own model repo
+  (`kpk11/tiny-aya-refusal-direction`, safetensors + steering config) with a dual-use notice, since ablating it
+  removes refusals (3/8 → 0/8 on held-out prompts). Disclosed in the article's limitations rather than gated.
+  Scanned the run outputs for local paths, hostnames and tokens before the flip: none.

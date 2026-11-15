@@ -14,16 +14,27 @@ half the strength the gain is still +21.7 points with no over-refusal and no cap
 
 ## Links
 
-| What | Link | Visibility |
-|---|---|---|
-| Code (GitHub) | https://github.com/kunjkansara01/tiny-aya-multilingual-steering | public |
-| Article | https://huggingface.co/datasets/kpk11/tiny-aya-refusal-steering-results/blob/main/ARTICLE.md (also `ARTICLE.md` in the repo) | public |
-| Metrics, calibration, sweep, timing | https://huggingface.co/datasets/kpk11/tiny-aya-refusal-steering-results | public |
-| Prompt dataset (EN / HI / GU eval sets + calibration set) | https://huggingface.co/datasets/kpk11/safety-prompts-en-hi-gu | public |
-| Raw generations, scored rows, AuditKIT run files, direction vector | https://huggingface.co/datasets/kpk11/tiny-aya-refusal-steering-generations | **private**, judges on request |
+Everything is public and un-gated (checked from an unauthenticated client).
 
-To give a judge access to the private repository: its Settings page on the Hub → add their HF username as a
-collaborator, or share a read token.
+**Collections (the two the form asks for)**
+
+| Collection | Link | Contents |
+|---|---|---|
+| Models (Track 2b) | https://huggingface.co/collections/kpk11/lexsi-hackathon-t2b-tiny-aya-refusal-steering-models-6af8db51be94db1572c81848 | `kpk11/tiny-aya-refusal-direction` |
+| Datasets | https://huggingface.co/collections/kpk11/lexsi-hackathon-t2b-tiny-aya-refusal-steering-datasets-6af8db52a45f2879a96003cc | prompts, generations, metrics + article |
+
+**Individual repositories**
+
+| What | Link | Type |
+|---|---|---|
+| Code | https://github.com/kunjkansara01/tiny-aya-multilingual-steering | GitHub |
+| Track 2b artifact: refusal direction (safetensors) + steering config + model card with dual-use notice | https://huggingface.co/kpk11/tiny-aya-refusal-direction | HF model |
+| Prompt sets (EN / HI / GU eval + calibration) | https://huggingface.co/datasets/kpk11/safety-prompts-en-hi-gu | HF dataset |
+| Raw baseline and steered generations, scored rows, AuditKIT run files (content warning at the top of the card) | https://huggingface.co/datasets/kpk11/tiny-aya-refusal-steering-generations | HF dataset |
+| Metrics, calibration, sweep, timing, article | https://huggingface.co/datasets/kpk11/tiny-aya-refusal-steering-results | HF dataset |
+| Article | https://huggingface.co/datasets/kpk11/tiny-aya-refusal-steering-results/blob/main/ARTICLE.md (also `ARTICLE.md` in the GitHub repo) | Markdown |
+
+The base model, `CohereLabs/tiny-aya-global`, is gated by Cohere (licence click); none of our repositories are.
 
 ## What the form is likely to ask
 
@@ -65,6 +76,8 @@ than tenfold with other GPU load, so only the ratio is reported as a result.
 - Alpha was chosen on a 60-prompt EN + HI subset of the evaluation set; the sweep extended beyond the requested
   0.05–0.4 grid.
 - Steering made one Gujarati reply worse (`harm-35`).
+- The direction is dual-use (ablating it removed refusals on held-out prompts, 3/8 → 0/8); it is published with
+  that disclosed on the model card and in the article's limitations, not gated.
 
 ## Before you submit
 
