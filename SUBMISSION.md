@@ -32,7 +32,7 @@ Everything is public and un-gated (checked from an unauthenticated client).
 | Prompt sets (EN / HI / GU eval + calibration) | https://huggingface.co/datasets/kpk11/safety-prompts-en-hi-gu | HF dataset |
 | Raw baseline and steered generations, scored rows, AuditKIT run files (content warning at the top of the card) | https://huggingface.co/datasets/kpk11/tiny-aya-refusal-steering-generations | HF dataset |
 | Metrics, calibration, sweep, timing, article | https://huggingface.co/datasets/kpk11/tiny-aya-refusal-steering-results | HF dataset |
-| Article | https://huggingface.co/datasets/kpk11/tiny-aya-refusal-steering-results/blob/main/ARTICLE.md (also `ARTICLE.md` in the GitHub repo) | Markdown |
+| Article | https://github.com/kunjkansara01/tiny-aya-multilingual-steering#readme (the GitHub README is the article; copy at https://huggingface.co/datasets/kpk11/tiny-aya-refusal-steering-results/blob/main/ARTICLE.md) | Markdown |
 
 The base model, `CohereLabs/tiny-aya-global`, is gated by Cohere (licence click); none of our repositories are.
 
@@ -82,8 +82,7 @@ than tenfold with other GPU load, so only the ratio is reported as a result.
 
 ## Before you submit
 
-1. Commit and push `ARTICLE.md`, `SUBMISSION.md`, `METRICS.md`, `FINDINGS.md`, `README.md` and `src/` to the GitHub
-   repository so it matches the Hub copy.
+1. The article is the top of `README.md`, with the content warning first; `ARTICLE.md` is a pointer to it.
 2. The repository contains `prompts/`, which includes the harmful prompt texts (the same content as the public
    prompt dataset).
 3. `results/` is git-ignored; the final numbers are in `METRICS.md` at the repository root.

@@ -162,3 +162,8 @@ Everything below is a Tiny Aya result from the local run (not Colab).
   (`kpk11/tiny-aya-refusal-direction`, safetensors + steering config) with a dual-use notice, since ablating it
   removes refusals (3/8 → 0/8 on held-out prompts). Disclosed in the article's limitations rather than gated.
   Scanned the run outputs for local paths, hostnames and tokens before the flip: none.
+- **R17. Leakage check, calibration vs evaluation.** 128 calibration prompts against 225 evaluation prompts after
+  normalising case, punctuation and Unicode form: 0 equal, 0 near-duplicates (token Jaccard ≥ 0.8 within a
+  language), 0 shared ids; calibration is English and Hindi only. The alpha sweep used 60 evaluation prompts
+  (EN + HI, 20 per set) and no Gujarati. No agreement rate between the phrase-match judge and human labels was
+  measured.

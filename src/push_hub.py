@@ -302,9 +302,15 @@ def stage(run: Path, tmp: Path, user: str) -> dict[str, Path]:
     for f in (run / "auditkit").glob("compare_*.txt"):
         shutil.copy(f, results / "auditkit" / f.name)
     shutil.copy(run / "metrics.md", results / "METRICS.md")  # the name ARTICLE.md links to
-    for name in ("ARTICLE.md", "FINDINGS.md"):
-        if (ROOT / name).exists():
-            shutil.copy(ROOT / name, results / name)
+    # The article is the top of the GitHub README; the Hub copy is that part, without the repository section.
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    cut = readme.find("## Repository layout & reproduction")
+    if cut < 0:
+        raise SystemExit("README.md has no '## Repository layout & reproduction' heading to cut the article at")
+    article = readme[:cut].rstrip().removesuffix("---").rstrip() + "\n"
+    (results / "ARTICLE.md").write_text(article, encoding="utf-8")
+    if (ROOT / "FINDINGS.md").exists():
+        shutil.copy(ROOT / "FINDINGS.md", results / "FINDINGS.md")
     (results / "README.md").write_text(results_card(metrics), encoding="utf-8")
     # 3 raw generations (public, content warning at the top of the card)
     gens.mkdir()
