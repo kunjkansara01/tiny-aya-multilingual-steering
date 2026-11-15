@@ -1,17 +1,20 @@
 # Prompt sets — review checklist
 
-Machine-drafted unless marked. Edit the JSONL files directly (one JSON object per line); keep `id` stable.
+Status: frozen for the final run. Hindi and Gujarati text was spot-checked by a native speaker, not fully read;
+the items listed below are the wordings that were least certain when drafted.
+
+LLM-assisted drafts unless marked. One JSON object per line; keep `id` stable.
 `src/build_prompts.py` regenerates only `en/harmful`, `hi/harmful` and `calib/harmful`.
 
-| File | n | Origin | Needs |
+| File | n | Origin | Review |
 |---|---|---|---|
-| `en/harmful.jsonl` | 40 | sampled from `CohereLabs/aya_redteaming` (english), human-written | skim |
-| `hi/harmful.jsonl` | 40 | sampled from `CohereLabs/aya_redteaming` (hindi), human-written | skim |
-| `gu/harmful.jsonl` | 40 | **my Gujarati translation of `en/harmful`** (same ids) | **native read** |
-| `*/benign_edgy.jsonl` | 20 each | hand-written EN, **my HI and GU translations** | **native read (HI, GU)** |
-| `*/capability.jsonl` | 15 each | hand-written, with accepted `answers` | check answers lists |
+| `en/harmful.jsonl` | 40 | sampled from `CohereLabs/aya_redteaming` (english), human-written | skimmed |
+| `hi/harmful.jsonl` | 40 | sampled from `CohereLabs/aya_redteaming` (hindi), human-written | skimmed |
+| `gu/harmful.jsonl` | 40 | LLM-assisted Gujarati translation of `en/harmful` (same ids) | native-speaker spot-check |
+| `*/benign_edgy.jsonl` | 20 each | LLM-assisted EN drafts, LLM-assisted HI and GU translations | native-speaker spot-check (HI, GU) |
+| `*/capability.jsonl` | 15 each | LLM-assisted drafts, with accepted `answers` | native-speaker spot-check (HI, GU) |
 | `calib/harmful.jsonl` | 32 EN + 32 HI | aya_redteaming, disjoint from eval | none |
-| `calib/harmless.jsonl` | 32 EN + 32 HI | hand-written EN, **my HI translation** | skim |
+| `calib/harmless.jsonl` | 32 EN + 32 HI | LLM-assisted EN drafts, LLM-assisted HI translation | native-speaker spot-check (HI) |
 
 ## Specific items to look at
 
@@ -20,7 +23,7 @@ Machine-drafted unless marked. Edit the JSONL files directly (one JSON object pe
 - `hi/harmful` `harm-hi-11` (tips to avoid overeating), `harm-hi-29` (make sister slim in two days), `harm-hi-39` (pros and cons list), `harm-hi-18`
 - the same ids in `gu/harmful` follow the EN set
 
-**Gujarati wording I am least sure of**
+**Gujarati wording that was least certain when drafted**
 - `harm-05`: "shiv" rendered as "ધારદાર હથિયાર (છરી)"
 - `harm-08`: "ankle" as "ઘૂંટી" # it is right 
 - `harm-14`: "binge drink / black out" paraphrased as "અતિશય દારૂ પીવો"

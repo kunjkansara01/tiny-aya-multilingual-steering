@@ -191,16 +191,26 @@ harassment, discrimination). They are here only to measure whether a model refus
 
 - `harmful`: EN and HI are sampled from [`CohereLabs/aya_redteaming`](https://huggingface.co/datasets/CohereLabs/aya_redteaming)
   (Apache-2.0, human-written; global-harm rows only, 8 prompts in each of 5 categories; sexual-content, graphic and
-  profanity categories and anything mentioning minors excluded). aya_redteaming has no Gujarati, so **GU is a
-  translation of the English 40** (same `id`s: EN and GU are a parallel pair; HI is native and not parallel).
+  profanity categories and anything mentioning minors excluded). aya_redteaming has no Gujarati, so **GU is an
+  LLM-assisted translation of the English 40**, spot-checked by a native speaker (same `id`s: EN and GU are a
+  parallel pair; HI is native and not parallel).
 - `benign_edgy`: XSTest-style requests that sound alarming but are harmless ("how do I kill a Python process").
-  Written in English, translated to HI and GU. Measures over-refusal.
+  LLM-assisted drafts in English, translated to HI and GU with LLM assistance, curated by the author; the HI and GU
+  text was spot-checked by a native speaker. Measures over-refusal.
 - `capability`: short factual questions with a list of accepted `answers`. Measures utility.
 - `calibration`: 32 EN + 32 HI harmful prompts from aya_redteaming (disjoint from the eval prompts) and 32 + 32
   benign requests of the same shape. **No Gujarati**, so Gujarati tests zero-shot transfer of the direction.
 
 Fields: `id`, `lang`, `set`, `category`, `prompt`, `source`, and `answers` (capability only).
-Sampling is reproducible with `src/build_prompts.py` (seed 20261114) in the project repository.
+The `source` field of every row states where it came from: `sampled from CohereLabs/aya_redteaming (seeded)`,
+`author-curated (LLM-assisted draft)` for English, `author-curated (LLM-assisted draft, native-speaker
+spot-checked)` for Hindi and Gujarati, and a translation note for the Gujarati harmful set.
+Sampling is reproducible with `src/build_prompts.py` (seed 20261114) in the project repository: {GITHUB}
+
+## AI usage statement
+
+Portions of the code and prompt drafts were produced with AI assistance; experimental design, native-language
+review, and final analysis are the author's.
 """
 
 

@@ -5,7 +5,7 @@ Writes:
   prompts/hi/harmful.jsonl      40 prompts sampled from CohereLabs/aya_redteaming (hindi)
   prompts/calib/harmful.jsonl   32 EN + 32 HI held-out prompts (disjoint from the eval sets)
 
-Hand-written files (NOT touched by this script):
+Author-curated files (LLM-assisted drafts, NOT touched by this script):
   prompts/gu/harmful.jsonl      Gujarati translations of the EN harmful set (same ids)
   prompts/*/benign_edgy.jsonl, prompts/*/capability.jsonl, prompts/calib/harmless.jsonl
 
@@ -33,6 +33,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 HUB = "https://huggingface.co/datasets/CohereLabs/aya_redteaming/resolve/main/{}"
 FILES = {"en": "aya_eng.jsonl", "hi": "aya_hin.jsonl"}
+AYA_SOURCE = "sampled from CohereLabs/aya_redteaming (seeded)"
 SEED = 20261114
 
 CATEGORIES = [
@@ -130,12 +131,12 @@ def main() -> None:
         ev = stratified(rows, 8, rng, exclude=set())
         write_jsonl(out / lang / "harmful.jsonl", [
             {"id": f"harm-{i:02d}" if lang == "en" else f"harm-hi-{i:02d}", "lang": lang, "set": "harmful",
-             "category": r["category"], "prompt": r["prompt"], "source": "CohereLabs/aya_redteaming"}
+             "category": r["category"], "prompt": r["prompt"], "source": AYA_SOURCE}
             for i, r in enumerate(ev, 1)])
         rest = [r for r in rows if r["prompt"] not in {e["prompt"] for e in ev}]
         rng.shuffle(rest)
         calib += [{"id": f"calib-harm-{lang}-{i:02d}", "lang": lang, "set": "calib_harmful",
-                   "category": r["cats"][0], "prompt": r["prompt"], "source": "CohereLabs/aya_redteaming"}
+                   "category": r["cats"][0], "prompt": r["prompt"], "source": AYA_SOURCE}
                   for i, r in enumerate(rest[:32], 1)]
     write_jsonl(out / "calib" / "harmful.jsonl", calib)
 

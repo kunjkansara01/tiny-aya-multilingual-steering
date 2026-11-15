@@ -111,7 +111,7 @@ def calibration_prompts(args) -> tuple[list[str], list[str], str]:
     harmful, harmless = order(harm_rows), order(safe_rows)
     m = min(len(harmful), len(harmless))
     desc = (f"local prompts/calib ({'+'.join(args.calib_langs)}), {m} per side: "
-            "aya_redteaming held-out harmful vs hand-written benign requests")
+            "aya_redteaming held-out harmful vs author-curated benign requests")
     return harmful[:m], harmless[:m], desc
 
 

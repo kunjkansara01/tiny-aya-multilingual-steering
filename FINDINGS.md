@@ -51,8 +51,8 @@ Checked at SafeTune `cc3de5f` (v0.1.12, 2026-11-12) and AuditKIT `556eb48` (v1.1
 - **F13. Sampling rule** (`src/build_prompts.py`, seed 20261114): global-harm rows only; dropped the categories
   *Non-consensual sexual content*, *Graphic material*, *Profanity* and anything mentioning minors; kept request-shaped
   prompts; 8 per category × 5 categories = 40. Eligible pool: 145 EN, 191 HI.
-- **F14. GU harmful = my translations of the EN-40** (same ids → EN↔GU is a parallel pair; HI is native aya, not parallel).
-- **F15. Calibration set is disjoint from eval**: 32 EN + 32 HI aya held-out harmful vs 32 + 32 hand-written benign
+- **F14. GU harmful = LLM-assisted translations of the EN-40** (same ids → EN↔GU is a parallel pair; HI is native aya, not parallel).
+- **F15. Calibration set is disjoint from eval**: 32 EN + 32 HI aya held-out harmful vs 32 + 32 author-curated (LLM-assisted) benign
   requests with matching shapes ("List 5 ways…"). **No Gujarati in calibration** → GU is a zero-shot transfer test of the direction.
 
 ### Dry run (Qwen2.5-0.5B-Instruct, CPU, 6 prompts/set, EN) — pipeline check only, not a result
@@ -156,7 +156,7 @@ Everything below is a Tiny Aya result from the local run (not Colab).
   Grid passes: 72.9 vs 42.5 decode tok/s, not comparable (different GPU states). The slow state coincides with
   total VRAM use at 7.3-7.6 of 8 GiB with a browser also on the GPU; cause not proven.
 - **R15. Process notes.** A batch size of 4 did not help (per-step time unchanged, throughput halved). One runner
-  bug of mine (`del g` before the log line) cost one failed attempt; caught before the int8 fallback fired.
+  bug (`del g` before the log line) cost one failed attempt; caught before the int8 fallback fired.
 - **R16. Everything published, public and un-gated (submission rule).** The generations dataset was flipped from
   private to public with a content warning at the top of its card; the direction vector is its own model repo
   (`kpk11/tiny-aya-refusal-direction`, safetensors + steering config) with a dual-use notice, since ablating it

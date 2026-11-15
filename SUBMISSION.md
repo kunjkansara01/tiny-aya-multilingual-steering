@@ -45,8 +45,9 @@ The base model, `CohereLabs/tiny-aya-global`, is gated by Cohere (licence click)
 | Model | `CohereLabs/tiny-aya-global` (Cohere, 3.35B, 36 layers, CC-BY-NC-4.0, gated), bf16 |
 | Lexsi repos chained | **SafeTune** 0.1.18 (`extract_refusal_direction`, `RefusalDirectionModel(mode="steer")`) → **AuditKIT** 1.1.12 (`evaluate(..., "precomputed")`, `compare`, `significance`) |
 | Method in one line | add `alpha × refusal direction` (layer 16 of 36, picked by SafeTune's validation sweep) to every decoder block's output; no retraining, weights untouched |
-| Data | 225 eval prompts: 40 harmful + 20 benign-but-edgy + 15 capability in each of EN, HI, GU. Harmful EN/HI sampled from `CohereLabs/aya_redteaming` (Apache-2.0); GU translated from the EN set. 64 + 64 calibration prompts (EN + HI), disjoint from eval |
+| Data | 225 eval prompts: 40 harmful + 20 benign-but-edgy + 15 capability in each of EN, HI, GU. Harmful EN/HI sampled from `CohereLabs/aya_redteaming` (Apache-2.0); GU translated from the EN set (LLM-assisted, native-speaker spot-checked); benign-edgy and capability sets are LLM-assisted drafts curated by the author. 64 + 64 calibration prompts (EN + HI), disjoint from eval |
 | Compute | one RTX 5050 Laptop GPU, 8 GB; weights 6.24 GiB, peak 6.32 GiB |
+| AI usage statement | Portions of the code and prompt drafts were produced with AI assistance; experimental design, native-language review, and final analysis are the author's. |
 | Reproduce | `python src/run_final.py`, then `python src/bench_throughput.py --run-dir results/final`, then `python src/report_final.py --run-dir results/final` |
 
 ## Before / after metrics (baseline → steered, alpha 0.8)

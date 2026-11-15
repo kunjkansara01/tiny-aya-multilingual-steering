@@ -37,3 +37,7 @@ python src/push_hub.py --run-dir results/final   # needs a write token
 ```
 
 Final numbers: [METRICS.md](METRICS.md). The prompt files contain harmful requests used only to measure refusal.
+
+## AI usage statement
+
+Portions of the code and prompt drafts were produced with AI assistance; experimental design, native-language review, and final analysis are the author's.

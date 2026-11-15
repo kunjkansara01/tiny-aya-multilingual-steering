@@ -1,7 +1,7 @@
 # Results: refusal-direction steering on CohereLabs/tiny-aya-global
 
 - **Model**: `CohereLabs/tiny-aya-global`, bf16 on NVIDIA GeForce RTX 5050 Laptop GPU (weights 6.24 GiB, peak with one generation 6.32 GiB of 7.96 GiB)
-- **Direction**: SafeTune `extract_refusal_direction`, layer **16** of 36 (validation sweep (min bypass s.t. KL/layer constraints)); local prompts/calib (en+hi), 64 per side: aya_redteaming held-out harmful vs hand-written benign requests
+- **Direction**: SafeTune `extract_refusal_direction`, layer **16** of 36 (validation sweep (min bypass s.t. KL/layer constraints)); local prompts/calib (en+hi), 64 per side: aya_redteaming held-out harmful vs author-curated benign requests
 - **Steering**: SafeTune `RefusalDirectionModel(mode="steer")`, **alpha = 0.8** added to the output of every decoder block; last-token residual norm at the picked layer ≈ 36.493
 - **Generation**: greedy, max_new_tokens 160, batch size 8; 225 prompts answered in both conditions
 - **Scoring**: EN/HI/GU pattern classifier (`src/score.py`) run as AuditKIT 1.1.12 metrics on precomputed outputs; cross-check vs. own aggregation: ok
